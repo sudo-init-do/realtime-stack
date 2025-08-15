@@ -1,0 +1,21 @@
+<!doctype html>
+<html>
+  <body>
+    <h3>WS Test</h3>
+    <pre id="log"></pre>
+    <script>
+      const log = (x)=>document.getElementById('log').textContent += x + "\n";
+      const header = btoa(JSON.stringify({ alg: "HS256", typ: "JWT" }));
+      const payload = btoa(JSON.stringify({ sub: "user-1", iat: Math.floor(Date.now()/1000) }));
+      const token = `${header}.${payload}.devsig`;
+      const ws = new WebSocket(`ws://localhost:8080?token=${encodeURIComponent(token)}`);
+      ws.onopen = () => {
+        log('connected');
+        ws.send(JSON.stringify({ type: 'join', roomId: 'room-1' }));
+        setTimeout(()=> ws.send(JSON.stringify({ type: 'chat', roomId: 'room-1', payload: { text: 'hello world' }})), 500);
+      };
+      ws.onmessage = (e) => log('recv ' + e.data);
+      ws.onclose = () => log('closed');
+    </script>
+  </body>
+</html>

@@ -1,0 +1,15 @@
+{
+  "name": "realtime-stack",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:ws": "npm run -w apps/ws-gateway dev",
+    "build": "echo Build root"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.4"
+  }
+}
